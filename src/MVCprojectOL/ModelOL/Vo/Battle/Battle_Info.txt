@@ -1,0 +1,23 @@
+戰鬥數據傳遞VO
+
+(Array)
+
+[ BattlefieldSteps , BattlefieldSteps... , BattleRound , BattlefieldSteps... , BattleRound ]
+
+
+
+BattlefieldInit >> 初始資料  (戰鬥單位狀態數值<BattleFighter> , 戰報顯示結果資料 , 戰場設定 , 戰鬥種類 ...)包夾著流程 (Array)
+
+
+BattlefieldSteps >> 每回合間一隻單位的一次動作 (行動方 , 攻擊者位置 , 防禦者狀態變更(BattleEffect) , 波及受害者變更([BattleEffect,...]) ... )
+
+
+BattleRound >> 每回合結束時 (是否結束戰鬥 , 結束回合後整場怪物的狀態變更([BattleRoundEffect,...])
+
+
+
+
+
+
+
+BattlefieldSteps , BattleEffect , BattleRoundEffect , BattleFighter 皆有繼承戰鬥基本數值 (BattleBasic)

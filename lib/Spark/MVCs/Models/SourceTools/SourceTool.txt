@@ -1,0 +1,181 @@
+
+//==================================================================================================================================
+編輯者:小凱   版號:20121030    說明: SourceTool 工具使用說明
+
+ 
+SourceTool功能介紹:
+
+(1)素材載入器:
+
+   1.啟動下載
+
+   2.切換載入模式
+
+   3.載入錯誤處理
+
+   4.載入佇列處理
+
+(2)素材管理器:
+   
+   1.新增元件加入素材庫
+
+   2.移除素材庫元件
+
+   3.取得素材元件
+
+(3)影像處理器:
+
+   1.影片片段拆解處理
+
+   2.截取BitMap圖像
+
+   3.圖像翻轉
+
+   4.圖像縮放
+
+   5.畫BitMapData圖到容器
+
+(4)訊息工具
+
+   1.建立訊息內容清單
+    
+   2.keyValue搜尋訊息字串
+
+
+
+//==================================================================================================================================
+
+
+SourceProxy操作方式說明:
+
+
+
+初始    SourceProxy.InitSourceTool( _domain:String );
+        
+        ------------------------>(  給予連線位置  )
+        
+        
+操作    ===============================素材下載、素材取用======================================
+
+載入	SourceProxy.PreloadMaterial(  _InputKey:* , _Interrupt:Boolean = false );
+	------------------------>(  string 、 Array  , 中斷開關 )
+        PS:可給予單一筆或多筆位置進行載入，多筆資料請用陣列裝。
+	   
+	   第二個參數是控制是否中斷載入開關，預設都是false。
+	   
+   	   一旦載入器被中斷，裡面堆疊陣列會被清空，外部想要插入其他包，就在丟清單或單一key進來。
+
+
+進度	SourceProxy.GetLoadProgress();
+	PS:回傳目前載入進度uint，需要注意這裡算的是素材占的總進度，不是單筆完成進度。
+
+
+取材	SourceProxy.GetImageSprite( _keyValue:String );(回傳Sprite)
+	------------------------->( 素材key碼 )
+	PS:取得靜態圖實體物件。(如果要直接在stage上顯示建議使用這個方法，外部則不需要在做畫圖的動作)
+	
+	SourceProxy.GetImageBitmapData( _keyValue:String );(回傳任意型別)
+	----------------------------->( 素材key碼 )
+	PS:取得靜態圖非實體物件--(因為第一次拿到LoadingBar是實體，第二次才取得BitmapData，所以才會使用任意型別回傳)
+	
+	
+	SourceProxy.GetMaterialSWF( _keyValue:String );(回傳MovieClip)
+	------------------------->( 素材key碼 )
+	PS:取得SWF素材物件。(回傳的MovieClip可在GetMovieClipHandler做拆解影格處理)
+
+	SourceProxy.GetMaterialSWP( _keyValue:String , _InputClassNameList:* , _NewComponent:Boolean = false );
+	------------------------->( 素材key碼 ， class名稱--可給一個或整張清單className ， 控制實體化開關 )
+	PS:第三個參數是控制要不要實體化回傳，true實體化、false非實體化。
+
+	
+	SourceProxy.GetMaterialSound( _keyValue:String );
+	--------------------------->( 素材key碼 )
+	PS:取得Sound載體 (素材的檔案是MP3，不支源WAV檔)
+	
+
+****
+事件	this.SendNotify( CommandsStrLad.Source_Complete , _Obj );
+
+	這裡是當素材管理器載入完成時會發出的通知，發出的資訊包裝成Object，
+	
+	但要注意Object包裝的內容======> _Obj.KeyCode ( 載好的素材key ) , _Obj.Progress ( 載好的總進度 )
+					
+	Progress拿到的進度是外面丟進處理堆疊的進度。
+
+	例如:
+
+	一次傳單一key碼，和一組陣列key碼
+	
+	this._SourceTool.PreloadMaterial( _KeyCode ); MOB00001
+	this._SourceTool.PreloadMaterial( _KeyArr ); [ "MOB00002" , "MOB00003" , "MOB00004" , "MOB00005" , "MOB00006" , "MOB00007" ]
+
+	處理回傳的Obj結果是:
+	
+	SendNotify!! 完成的KeyCode : MOB00001     目前總進度:  100
+	SendNotify!! 完成的KeyCode : MOB00002     目前總進度:  17
+	SendNotify!! 完成的KeyCode : MOB00003     目前總進度:  34
+	SendNotify!! 完成的KeyCode : MOB00004     目前總進度:  50
+	SendNotify!! 完成的KeyCode : MOB00005     目前總進度:  67
+	SendNotify!! 完成的KeyCode : MOB00006     目前總進度:  84
+	SendNotify!! 完成的KeyCode : MOB00007     目前總進度:  100
+
+	PS:這邊所發出事件是完成一次發一次，只是進度一起夾在發出事件的Object裡，千萬不要誤會!!
+
+
+
+取類別	SourceProxy.GetDismantleSwf( _InputClassNameList:Vector.<String> );
+	-------------------------->(  類別名稱清單  )
+	PS:用keycode和類別名稱取出Swf裡的class元件，回傳的是Object型別。
+
+
+
+操作	===============================素材影像處理===========================================
+
+
+Swf截取	SourceProxy.GetMovieClipHandler( _InputMc:MovieClip );
+	------------------------------>( 給予Swf元件 )
+	PS:動畫影像拆解處理(回傳Array)裝的是BitmapData。
+
+
+圖像截取 SourceProxy.CutImgaeHandler( _Bmd:BitmapData, _Width:uint, _Height:uint );
+	 -------------------------->( 給予圖像 , 圖片寬 , 圖片高 )
+	 PS:這裡是執行靜態圖片截取，把所有動作圖片擺成矩陣型態，在丟進裡面做截取處理。
+
+取得群組 SourceProxy.GetCutImageGroup( _Count:uint , _length:uint );
+	 --------------------------->( 第N個組別  ,  取出數量 )	
+	 PS:使用這個方法將會回傳Array，但要指定取出的位置與數量，再交給播放器做播放。
+
+
+圖像翻轉 SourceProxy.RotationImg( _InputBmp:Bitmap , _InBoolean:Boolean );
+	 ---------------------->( 給予圖像 , 控制垂直或水平翻轉 )
+	 PS:當true時是水平翻轉、false時是垂直翻轉。
+
+
+圖像縮放 SourceProxy.ScaleImg( _target:DisplayObject , _tarW:int , _tarH:int );
+	 ------------------->( 給予顯示物件 , 放寬度 , 放高度 )
+	 PS:將圖像放大或縮小
+
+
+畫Bitmap SourceProxy.DrawSprite( _InputBmd:BitmapData );
+	 --------------------->( 給予BitmapData物件 )
+	 PS:回傳Sprite，外面只要指向就好。
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+

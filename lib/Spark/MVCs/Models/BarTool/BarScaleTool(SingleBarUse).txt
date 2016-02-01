@@ -1,0 +1,38 @@
+[Andrew] [Edit:20120601] [BarScaleTool]
+
+@單bar操作
+
+操作方式：傳入需調整縮放的BAR元件(註冊點須先處理)，對Class方法操作即可.
+	  (具緩衝,快速操作之下會逐筆處理)
+
+	
+type	function >> documentation
+-------------------------------------------------------------
+建構	BarScaleTool ( DisplayObject , Number , Boolean=true , Number=1 )
+	
+	    	     >>(Bar元件 , Bar總值 , 是否為平行Bar(false為垂直縮放型) , Bar縮放的時間長度);
+-------------------------------------------------------------
+操作	RunChangeValue = Number [Set] >> 傳入需要增減的"變化值";(與 RunTotalValue 交互運行不影響)
+
+	RunTotalValue = Number [Set] >> 傳入需要變更的"當前值";(與 RunChangeValue 交互運行不影響)
+
+	ReSetBar ( Boolean , Number=0 ) >> ( 是(true) 否(false) 回滿Bar條 , 須重設的最大值[0為無變化] )
+
+	Source : DisplayObject [Get] >> 取得傳入的實體
+-------------------------------------------------------------
+檢測 	CurrentValue >> 取得當前值(有BUFFER時會是處理中的當前操作值)
+[Get]
+	TotalValue >> 取得總值
+
+	FinalValue >> 取得當前值(不管是否BUFFER)
+-------------------------------------------------------------
+註銷	ReleaseBar >> 清空關聯
+
+===================================================================================
+EX:
+
+	var bar:BarScaleTool=new BarScaleTool(source,1000,1000);
+	
+	bar.RunValue=-100;
+
+	bar.ReSetBar(true);

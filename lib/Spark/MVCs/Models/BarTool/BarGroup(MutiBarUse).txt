@@ -1,0 +1,56 @@
+[Andrew] [Edit:20120612] [BarGroup]
+
+@多bar操作管理
+
+操作方式：傳入需調整縮放的BAR元件(註冊點須先處理)，對Class方法操作即可.
+	  (具緩衝,快速操作之下會逐筆處理)
+
+	
+type	function >> documentation
+-------------------------------------------------------------
+建構	BarGroup () >> None;
+	
+-------------------------------------------------------------
+操作	AddBar(String , DisplayObject , Number , Number , Boolean=true , Number=1);
+	>> (自定義BAR對應名稱 , BAR物件實體 , 當前值 , 最大值 , 是否為平行BAR , 動態速度[越小越快] );
+
+	BarRunValue( String , Number ) >> ( BAR名稱 , 值的變化量 );改變BAR當前值量
+
+	BarTotalValue( String , Number ) >> ( BAR名稱 , 值的當前量 );改變BAR當前值量
+
+	BarReset( String , Boolean , Number=0 ) >> ( BAR名稱 , 是否回滿BAR量 , 重設的最大值[0則無變化] );重設BAR值量
+
+	GetAllKeys [Get Array] >> 回傳當前所有註冊過的BAR名稱
+
+	GetBar( String ) >> 取得傳入的BAR實體
+
+-------------------------------------------------------------
+檢測 	GetCurrentValue( String ) : Number >> 輸入BAR-Name取得當前值(有BUFFER時會是處理中的當前操作值)
+
+	GetTotalValue( String ) : Number >> 輸入BAR-Name取得總值
+
+	GetFinalValue( String ) : Number >> 輸入BAR-Name取得當前值(不管是否BUFFER)
+-------------------------------------------------------------
+註銷	RemoveBar( String ) >> 移除BAR關聯;
+
+	RemoveAllBar() >> 移除所有BAR關聯;
+
+	Destroy() >> 移除所有BAR關聯並銷毀庫存物件;
+
+===================================================================================
+EX:
+
+	var barGroup:BarGroup = new BarGroup();
+	
+	//滿值100的BAR
+	barGroup.AddBar("bar1", SpriteA , 100, 100);
+	
+	//值減十
+	barGroup.BarRunValue("bar1" , -10 );
+
+	//值加二十
+	barGroup.BarRunValue("bar1" , 20 );
+
+	//值回滿(BAR回滿)
+	barGroup.BarReset("bar1", true);
+

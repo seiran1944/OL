@@ -1,0 +1,41 @@
+*供繼承或時接使用的Class種類如下
+
+single>>單一素材整串播放模式 需"圖片素材陣列"
+
+BitmapVision
+SpriteVision
+MovieClipVision
+
+
+multiple>>單一素材分段播放模式 需"圖片素材陣列" 與 "分段指令集"
+
+MultiBimtapVision
+MultiSpriteVision
+MultiMovieClipVision
+
+
+extra>>提供MovieClip影格播放掛載方式 需"MovieClip實體"
+
+ExtraMovieClipVision	->	整串式播放
+ExtraMultiClipVersion	->	分段式播放 >> 需"分段指令集"
+
+
+
+VisionCenter.GetInstance() 取得控制區後需先使用 Start()方法 讓播放器運行
+
+依照不同種類分別註冊即可運作
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

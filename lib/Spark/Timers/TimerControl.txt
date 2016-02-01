@@ -1,0 +1,66 @@
+[Andrew] [Edit:20120529] [SourceTimer]
+
+
+Timer操作方式[主程式運行];
+
+	static class SourceTimer (單一的 Timer控制處)
+	
+	@剛運行時準確度較低
+	@100毫秒起始的驅動準確度較佳
+	@1 or 10毫秒起始的驅動偏移時間較多,時間長偏差越多 <有做偏差值註冊時校正處理>
+	
+	
+type	function >> documentation
+
+初始	SetSpeed(int)>>輸入值等同new Timer(int) 基礎速度初始化Timer (run once) 1開頭為佳(10,100);
+
+工具	FPSToSpeed(Number)>>換算工具 return(Number);
+
+操作	ToRun()>>運行Timer
+
+	ToStop()>>停止Timer
+
+	ToReset()>>重置Timer
+
+檢測	GetRunning>>是(true) 否(false) 運行中 
+[Get]
+	GetCurrentCount>>基礎速率已運行的次數(int)
+	
+	GetRepeatCount>>需要運行的總次數 (int 無限運轉=0)
+	
+	GetSpeed>>設置的運行速率 (int)
+
+=====================================================================================
+Timer驅動 Function操作方式[共用];
+
+	static class TimeDriver ;
+	
+type	function >> documentation
+
+操作	AddDrive()>>註冊運行內容
+		(
+		*時間 (int)
+		*次數 (int=0[無限運行])
+		*運行處 (Function)
+		運行處-參數 (Array[順序填入])
+		運行結束處 (Function)-有設定次數才需要值
+		運行結束-參數 (Array[順序填入])-有設定次數才需要值
+		);	
+	
+	RemoveDrive(Function)>>傳入註冊的運行Function,移除註冊
+	
+	AddEnterFrame()>>註冊EnterFrame效果的驅動運行,首參數輸入FPS(Number),後續參數同AddDrive
+	
+	Pause(Function)>>傳入註冊的運行Function,暫停該 Function的驅動
+	
+	Resume(Function)>>傳入註冊的運行Function,回復該 Function的驅動
+	
+檢測	CheckRunning((Function))>>傳入註冊的運行Function,運行中(true) / 停止(false)
+	
+	CheckEnd((Function))>>傳入註冊的運行Function,已達到運行次數(true) / 尚未達到運行次數(false)
+	
+	CheckCount((Function))>>傳入註冊的運行Function,已運行次數(int)
+	
+	CheckEndlessRun((Function))>>傳入註冊的運行Function,是否為無限運行,是(true) / 否(false)
+
+

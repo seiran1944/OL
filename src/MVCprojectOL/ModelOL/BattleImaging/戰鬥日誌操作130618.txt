@@ -1,0 +1,37 @@
+Proxy註冊名稱 ArchivesStr.BATTLEIMAGING_SYSTEM (已註冊常駐)
+
+
+====================================================================================================================================
+每次開啟UI時取得清單資料
+
+BattleImagingProxy.GetInstance().GetHistoricalFilm()  載入完成時會發送訊號
+
+>> ArchivesStr.BATTLEIMAGING_DATA_READY
+
+>> 夾帶一個陣列 內有全報告清單的Object
+
+Object屬性 (All String) Ex:
+{
+ _battleId : ID
+
+ _infoTitle : "[王國]城下廢墟-第5節點戰鬥結果[勝利]"
+
+ _dateTitle : "2013/4/15 18:00"
+}
+
+====================================================================================================================================
+點選清單中的項目要觀看細項時
+
+BattleImagingProxy.GetInstance().GetInfoContent( battleId ) : BattleResult
+
+傳入點選的ID會回傳 須顯示的全部資料VO
+
+====================================================================================================================================
+點選確認要觀看戰鬥回顧時
+
+BattleImagingProxy.GetInstance().ReadyToImaging( battleId ) 
+
+呼叫時Proxy會做戰鬥回顧相關處理 播放時會疊在戰鬥日誌UI上 關閉時不影響
+
+戰鬥日誌UI不變 依照玩家後續操作而定
+
