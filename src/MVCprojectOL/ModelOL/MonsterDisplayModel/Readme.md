@@ -1,6 +1,6 @@
 This module is for Monster display work as display entity. It includes:
   - Monster Display Entity Factory :
-      You may get Display Objects by sending Value Objects to the Factory.
+      You may get Display Objects by sending Value Objects into the Factory.
       
   - Media Source Cache :
       You don't have to handle other source procedures, this module will initiate all Multimedia Sources Downloading and Cache 
